@@ -28,4 +28,18 @@ export default defineConfig({
             formVariants: true,
         }),
     ],
+    server: {
+        // Bind em todas as interfaces do container para a porta mapeada funcionar.
+        host: '0.0.0.0',
+        port: 5173,
+        // URL que vai para o public/hot e o cliente HMR: localhost (mapeado pelo
+        // Docker), evitando o [::1] IPv6 que não é exposto.
+        hmr: {
+            host: 'localhost',
+        },
+        // inotify não propaga em bind mounts do Docker; polling garante o refresh.
+        watch: {
+            usePolling: true,
+        },
+    },
 });
