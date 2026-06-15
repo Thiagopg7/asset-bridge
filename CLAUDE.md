@@ -6,6 +6,10 @@
 - Types: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`, `style`
 - Nunca incluir `Co-Authored-By: Claude` nem qualquer assinatura do Claude nas mensagens de commit.
 
+## Código
+- Nomes de classes, arquivos, métodos, variáveis e demais identificadores sempre em **inglês**.
+- Apenas a interface (textos exibidos ao usuário) e mensagens de retorno serão em **PT-BR**.
+
 ## Docker
 *(Ambiente Docker ainda não configurado — esta seção será preenchida quando implementado.)*
 
@@ -14,6 +18,11 @@
 - Não rodar `php artisan migrate:fresh` sem confirmar explicitamente com o usuário.
 - Não instalar pacotes (composer/npm) sem perguntar antes.
 - Não fazer commit nem push sem perguntar antes ao usuário.
+
+## Segurança em commits
+- Antes de todo commit/push, verificar que nenhuma chave privada, credencial, token, senha ou segredo está sendo enviado para o origin (ex.: `.env`, `*.key`, `*.pem`, `auth.json`, tokens em código ou em arquivos de configuração).
+- Inspecionar o conteúdo staged (`git diff --cached`) em busca de segredos antes de confirmar o commit.
+- Se encontrar algo sensível, interromper, alertar o usuário e remover do stage antes de prosseguir.
 
 ---
 
