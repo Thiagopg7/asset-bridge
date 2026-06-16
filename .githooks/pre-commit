@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+#
+# Hook de pre-commit: varre os arquivos staged com o gitleaks em busca de
+# segredos (chaves, tokens, senhas) antes de permitir o commit.
+#
+# Ative os hooks versionados uma única vez por clone com:
+#   git config core.hooksPath .githooks
+# (o script "prepare" do package.json faz isso automaticamente no npm install)
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+    echo "❌ gitleaks não encontrado. Instale-o para habilitar a varredura de segredos:"
+    echo "    https://github.com/gitleaks/gitleaks#installing"
+    echo "    Commit bloqueado. (Para pular em um caso específico: git commit --no-verify)"
+    exit 1
+fi
+
+echo "🔎 gitleaks: varrendo arquivos staged em busca de segredos..."
+
+if ! gitleaks git --staged --redact --no-banner; then
+    echo ""
+    echo "❌ gitleaks detectou possíveis segredos no conteúdo staged."
+    echo "   Remova-os do stage e do código antes de commitar."
+    echo "   Falso positivo? Adicione um comentário 'gitleaks:allow' na linha"
+    echo "   ou ajuste o allowlist em .gitleaks.toml."
+    exit 1
+fi
+
+echo "✅ gitleaks: nenhum segredo detectado."
+exit 0

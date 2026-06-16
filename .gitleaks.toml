@@ -1,0 +1,20 @@
+# Configuração do gitleaks para o asset-bridge.
+# Estende o conjunto de regras padrão do gitleaks e adiciona um allowlist
+# com caminhos e padrões que geram falsos positivos conhecidos neste projeto.
+title = "asset-bridge gitleaks config"
+
+[extend]
+# Reaproveita todas as regras embutidas do gitleaks.
+useDefault = true
+
+[allowlist]
+description = "Caminhos e padrões ignorados na varredura de segredos"
+
+paths = [
+    '''\.env\.example$''',
+    '''package-lock\.json$''',
+    '''composer\.lock$''',
+    '''(^|/)public/build/''',
+    '''(^|/)node_modules/''',
+    '''(^|/)vendor/''',
+]

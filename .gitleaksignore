@@ -1,0 +1,5 @@
+# Achados conhecidos e revisados como falso-positivo (formato: <commit>:<arquivo>:<regra>:<linha>).
+# São exemplos de credenciais em documentação de skills (demonstram o que NÃO fazer),
+# não segredos reais. Veja .claude/skills/.../rules/config.md.
+3e96c6cafa44669293127b88af817d624a6da6ca:.claude/skills/laravel-best-practices/rules/config.md:generic-api-key:30
+3e96c6cafa44669293127b88af817d624a6da6ca:.agents/skills/laravel-best-practices/rules/config.md:generic-api-key:30
