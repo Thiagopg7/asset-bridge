@@ -1,6 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
-import Heading from '@/components/heading';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
+import Heading from '@/components/heading';
 import type { Branch } from '@/types';
 import BranchForm from './partials/branch-form';
 
