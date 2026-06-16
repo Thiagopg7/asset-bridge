@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+#
+# Hook de pre-push: reproduz localmente o mesmo gate do CI antes de subir,
+# evitando surpresas de build vermelho no GitHub Actions.
+#
+# Etapas (espelham os jobs "linter" e "tests"):
+#   1. Regenera os arquivos do Wayfinder com --with-form (formVariants: true no
+#      vite.config), pois sao gitignored e o eslint/tsc precisam resolve-los.
+#   2. Roda composer ci:check -> eslint + prettier + tsc + pint + testes.
+#
+# Para pular em um push pontual: git push --no-verify
+
+if ! command -v php >/dev/null 2>&1 || ! command -v composer >/dev/null 2>&1; then
+    echo "❌ php/composer nao encontrados. Necessarios para o gate de pre-push."
+    echo "   Para pular: git push --no-verify"
+    exit 1
+fi
+
+echo "🔧 pre-push: regenerando arquivos do Wayfinder (--with-form)..."
+if ! php artisan wayfinder:generate --with-form; then
+    echo "❌ Falha ao gerar os arquivos do Wayfinder."
+    exit 1
+fi
+
+echo "🧪 pre-push: rodando o gate completo (composer ci:check)..."
+if ! composer ci:check; then
+    echo ""
+    echo "❌ As verificacoes falharam. Corrija antes de subir."
+    echo "   (Para pular em um caso pontual: git push --no-verify)"
+    exit 1
+fi
+
+echo "✅ pre-push: tudo verde. Prosseguindo com o push."
+exit 0
