@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
+import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import type { Branch, Paginated } from '@/types';
 
 type Props = {
@@ -32,7 +32,10 @@ export default function BranchesIndex({ branches }: Props) {
     const [processing, setProcessing] = useState(false);
 
     function handleDelete() {
-        if (!deleting) return;
+        if (!deleting) {
+            return;
+        }
+
         setProcessing(true);
         router.delete(BranchController.destroy.url(deleting.id), {
             onFinish: () => {
