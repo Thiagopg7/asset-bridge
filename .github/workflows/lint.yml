@@ -49,7 +49,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Generate Wayfinder Files
-        run: php artisan wayfinder:generate
+        run: php artisan wayfinder:generate --with-form
 
       - name: Check Pint
         run: composer lint:check
