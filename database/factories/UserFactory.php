@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Enums\Role as RoleEnum;
+use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends Factory<User>
@@ -56,5 +59,57 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
         ]);
+    }
+
+    /**
+     * Assign the user to the given branch.
+     */
+    public function forBranch(Branch $branch): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'branch_id' => $branch->id,
+        ]);
+    }
+
+    /**
+     * Assign the admin role to the user.
+     */
+    public function admin(): static
+    {
+        return $this->withRole(RoleEnum::Admin);
+    }
+
+    /**
+     * Assign the diretor role to the user.
+     */
+    public function diretor(): static
+    {
+        return $this->withRole(RoleEnum::Diretor);
+    }
+
+    /**
+     * Assign the gerente role to the user.
+     */
+    public function gerente(): static
+    {
+        return $this->withRole(RoleEnum::Gerente);
+    }
+
+    /**
+     * Assign the colaborador role to the user.
+     */
+    public function colaborador(): static
+    {
+        return $this->withRole(RoleEnum::Colaborador);
+    }
+
+    /**
+     * Assign the given role to the user after creation, creating it if needed.
+     */
+    protected function withRole(RoleEnum $role): static
+    {
+        return $this->afterCreating(function (User $user) use ($role) {
+            $user->assignRole(Role::findOrCreate($role->value, 'web'));
+        });
     }
 }
