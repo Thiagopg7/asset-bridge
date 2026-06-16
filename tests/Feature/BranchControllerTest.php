@@ -18,7 +18,7 @@ it('allows an admin to list branches', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('branches/index')
-            ->has('branches', 2)
+            ->has('branches.data', 2)
         );
 });
 
