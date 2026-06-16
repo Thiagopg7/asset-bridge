@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Building2, FolderGit2, LayoutGrid } from 'lucide-react';
+import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,7 +14,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
