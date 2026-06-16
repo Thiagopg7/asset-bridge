@@ -8,7 +8,7 @@ export default function BranchCreate() {
         <>
             <Head title="Nova filial" />
 
-            <div className="px-4 py-6 space-y-6">
+            <div className="space-y-6 px-4 py-6">
                 <Heading
                     variant="small"
                     title="Nova filial"

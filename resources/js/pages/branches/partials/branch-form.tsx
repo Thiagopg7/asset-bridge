@@ -2,13 +2,43 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { Branch } from '@/types';
 
 const UF_OPTIONS = [
-    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
-    'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
-    'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+    'AC',
+    'AL',
+    'AP',
+    'AM',
+    'BA',
+    'CE',
+    'DF',
+    'ES',
+    'GO',
+    'MA',
+    'MT',
+    'MS',
+    'MG',
+    'PA',
+    'PB',
+    'PR',
+    'PE',
+    'PI',
+    'RJ',
+    'RN',
+    'RS',
+    'RO',
+    'RR',
+    'SC',
+    'SP',
+    'SE',
+    'TO',
 ];
 
 type BranchFormErrors = Partial<Record<keyof Branch, string>>;
@@ -20,7 +50,12 @@ type Props = {
     submitLabel: string;
 };
 
-export default function BranchForm({ errors, processing, defaultValues, submitLabel }: Props) {
+export default function BranchForm({
+    errors,
+    processing,
+    defaultValues,
+    submitLabel,
+}: Props) {
     return (
         <div className="space-y-6">
             <div className="grid gap-2">
@@ -61,7 +96,10 @@ export default function BranchForm({ errors, processing, defaultValues, submitLa
 
                 <div className="grid gap-2">
                     <Label htmlFor="state">UF</Label>
-                    <Select name="state" defaultValue={defaultValues?.state ?? ''}>
+                    <Select
+                        name="state"
+                        defaultValue={defaultValues?.state ?? ''}
+                    >
                         <SelectTrigger id="state">
                             <SelectValue placeholder="Selecione" />
                         </SelectTrigger>

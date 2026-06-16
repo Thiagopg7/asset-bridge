@@ -40,7 +40,13 @@ export function AppSidebar() {
             icon: LayoutGrid,
         },
         ...(can.manageBranches
-            ? [{ title: 'Filiais', href: BranchController.index.url(), icon: Building2 }]
+            ? [
+                  {
+                      title: 'Filiais',
+                      href: BranchController.index.url(),
+                      icon: Building2,
+                  },
+              ]
             : []),
     ];
 

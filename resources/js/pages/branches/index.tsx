@@ -49,9 +49,12 @@ export default function BranchesIndex({ branches }: Props) {
         <>
             <Head title="Filiais" />
 
-            <div className="px-4 py-6 space-y-6">
+            <div className="space-y-6 px-4 py-6">
                 <div className="flex items-center justify-between">
-                    <Heading title="Filiais" description="Gerencie as filiais da empresa" />
+                    <Heading
+                        title="Filiais"
+                        description="Gerencie as filiais da empresa"
+                    />
                     <Button asChild size="sm">
                         <Link href={BranchController.create.url()}>
                             <PlusIcon className="mr-2 h-4 w-4" />
@@ -95,9 +98,13 @@ export default function BranchesIndex({ branches }: Props) {
                                     <TableCell>{branch.state ?? '—'}</TableCell>
                                     <TableCell>
                                         {branch.active ? (
-                                            <Badge variant="default">Ativa</Badge>
+                                            <Badge variant="default">
+                                                Ativa
+                                            </Badge>
                                         ) : (
-                                            <Badge variant="secondary">Inativa</Badge>
+                                            <Badge variant="secondary">
+                                                Inativa
+                                            </Badge>
                                         )}
                                     </TableCell>
                                     <TableCell>
@@ -107,19 +114,29 @@ export default function BranchesIndex({ branches }: Props) {
                                                 size="icon"
                                                 asChild
                                             >
-                                                <Link href={BranchController.edit.url(branch.id)}>
+                                                <Link
+                                                    href={BranchController.edit.url(
+                                                        branch.id,
+                                                    )}
+                                                >
                                                     <PencilIcon className="h-4 w-4" />
-                                                    <span className="sr-only">Editar</span>
+                                                    <span className="sr-only">
+                                                        Editar
+                                                    </span>
                                                 </Link>
                                             </Button>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 className="text-destructive hover:text-destructive"
-                                                onClick={() => setDeleting(branch)}
+                                                onClick={() =>
+                                                    setDeleting(branch)
+                                                }
                                             >
                                                 <Trash2Icon className="h-4 w-4" />
-                                                <span className="sr-only">Excluir</span>
+                                                <span className="sr-only">
+                                                    Excluir
+                                                </span>
                                             </Button>
                                         </div>
                                     </TableCell>
@@ -132,13 +149,16 @@ export default function BranchesIndex({ branches }: Props) {
                 {branches.last_page > 1 && (
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>
-                            Exibindo {branches.from}–{branches.to} de {branches.total} filiais
+                            Exibindo {branches.from}–{branches.to} de{' '}
+                            {branches.total} filiais
                         </span>
                         <div className="flex gap-1">
                             {branches.links.map((link, i) => (
                                 <Button
                                     key={i}
-                                    variant={link.active ? 'default' : 'outline'}
+                                    variant={
+                                        link.active ? 'default' : 'outline'
+                                    }
                                     size="sm"
                                     disabled={!link.url}
                                     asChild={!!link.url}
@@ -146,10 +166,16 @@ export default function BranchesIndex({ branches }: Props) {
                                     {link.url ? (
                                         <Link
                                             href={link.url}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
                                         />
                                     ) : (
-                                        <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
+                                        />
                                     )}
                                 </Button>
                             ))}
@@ -158,15 +184,20 @@ export default function BranchesIndex({ branches }: Props) {
                 )}
             </div>
 
-            <Dialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
+            <Dialog
+                open={!!deleting}
+                onOpenChange={(open) => !open && setDeleting(null)}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Excluir filial</DialogTitle>
                         <DialogDescription>
                             Tem certeza que deseja excluir{' '}
-                            <span className="font-semibold">{deleting?.name}</span>? Os
-                            colaboradores vinculados perderão o vínculo com a filial. Esta ação
-                            não pode ser desfeita.
+                            <span className="font-semibold">
+                                {deleting?.name}
+                            </span>
+                            ? Os colaboradores vinculados perderão o vínculo com
+                            a filial. Esta ação não pode ser desfeita.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -192,7 +223,5 @@ export default function BranchesIndex({ branches }: Props) {
 }
 
 BranchesIndex.layout = {
-    breadcrumbs: [
-        { title: 'Filiais', href: BranchController.index.url() },
-    ],
+    breadcrumbs: [{ title: 'Filiais', href: BranchController.index.url() }],
 };
