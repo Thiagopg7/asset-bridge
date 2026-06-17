@@ -44,6 +44,25 @@ export type Branch = {
 
 export type Can = {
     manageBranches: boolean;
+    viewUsers: boolean;
+    manageUsers: boolean;
+};
+
+export type UserListItem = {
+    id: number;
+    name: string;
+    email: string;
+    branch_id: number | null;
+    branch: { id: number; name: string } | null;
+    role: string | null;
+};
+
+export type UserFormData = {
+    id: number;
+    name: string;
+    email: string;
+    branch_id: number | null;
+    role: string | null;
 };
 
 export type PaginationLink = {

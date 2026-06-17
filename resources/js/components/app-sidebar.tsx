@@ -1,6 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Building2, FolderGit2, LayoutGrid } from 'lucide-react';
+import { BookOpen, Building2, FolderGit2, LayoutGrid, ShieldCheck, Users } from 'lucide-react';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
+import RoleController from '@/actions/App/Http/Controllers/RoleController';
+import UserController from '@/actions/App/Http/Controllers/UserController';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -45,6 +47,20 @@ export function AppSidebar() {
                       title: 'Filiais',
                       href: BranchController.index.url(),
                       icon: Building2,
+                  },
+              ]
+            : []),
+        ...(can.viewUsers
+            ? [
+                  {
+                      title: 'Usuários',
+                      href: UserController.index.url(),
+                      icon: Users,
+                  },
+                  {
+                      title: 'Cargos',
+                      href: RoleController.index.url(),
+                      icon: ShieldCheck,
                   },
               ]
             : []),
