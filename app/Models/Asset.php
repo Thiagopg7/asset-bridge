@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Database\Factories\BranchFactory;
+use App\Enums\AssetUnit;
+use Database\Factories\AssetFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name', 'code', 'city', 'state', 'active'])]
-class Branch extends Model
+#[Fillable(['name', 'description', 'unit', 'active'])]
+class Asset extends Model
 {
-    /** @use HasFactory<BranchFactory> */
+    /** @use HasFactory<AssetFactory> */
     use HasFactory;
 
     /**
@@ -22,22 +23,13 @@ class Branch extends Model
     protected function casts(): array
     {
         return [
+            'unit' => AssetUnit::class,
             'active' => 'boolean',
         ];
     }
 
     /**
-     * The users assigned to this branch.
-     *
-     * @return HasMany<User, $this>
-     */
-    public function users(): HasMany
-    {
-        return $this->hasMany(User::class);
-    }
-
-    /**
-     * Stock items held by this branch.
+     * Stock items for this asset across all branches.
      *
      * @return HasMany<StockItem, $this>
      */

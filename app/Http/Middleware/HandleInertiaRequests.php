@@ -46,6 +46,8 @@ class HandleInertiaRequests extends Middleware
                 'manageBranches' => $request->user()?->can(Permission::BranchesManage->value) ?? false,
                 'viewUsers' => $request->user()?->can(Permission::UsersView->value) ?? false,
                 'manageUsers' => $request->user()?->can(Permission::UsersManage->value) ?? false,
+                'viewAssets' => $request->user()?->can(Permission::AssetsView->value) ?? false,
+                'manageAssets' => $request->user()?->can(Permission::AssetsManage->value) ?? false,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];

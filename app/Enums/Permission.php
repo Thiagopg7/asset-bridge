@@ -12,6 +12,8 @@ enum Permission: string
     case RequestsApprove = 'requests.approve';
     case TransfersAuthorize = 'transfers.authorize';
     case DispatchExecute = 'dispatch.execute';
+    case AssetsView = 'assets.view';
+    case AssetsManage = 'assets.manage';
 
     /**
      * All permission values.

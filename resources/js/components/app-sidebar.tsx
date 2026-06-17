@@ -4,9 +4,11 @@ import {
     Building2,
     FolderGit2,
     LayoutGrid,
+    Package,
     ShieldCheck,
     Users,
 } from 'lucide-react';
+import AssetController from '@/actions/App/Http/Controllers/AssetController';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import RoleController from '@/actions/App/Http/Controllers/RoleController';
 import UserController from '@/actions/App/Http/Controllers/UserController';
@@ -54,6 +56,15 @@ export function AppSidebar() {
                       title: 'Filiais',
                       href: BranchController.index.url(),
                       icon: Building2,
+                  },
+              ]
+            : []),
+        ...(can.viewAssets
+            ? [
+                  {
+                      title: 'Ativos',
+                      href: AssetController.index.url(),
+                      icon: Package,
                   },
               ]
             : []),

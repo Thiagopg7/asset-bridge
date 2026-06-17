@@ -48,15 +48,19 @@ class RolePermissionSeeder extends Seeder
                 PermissionEnum::RequestsApprove->value,
                 PermissionEnum::TransfersAuthorize->value,
                 PermissionEnum::DispatchExecute->value,
+                PermissionEnum::AssetsView->value,
+                PermissionEnum::AssetsManage->value,
             ],
             RoleEnum::Gerente => [
                 PermissionEnum::BranchesView->value,
                 PermissionEnum::UsersView->value,
                 PermissionEnum::RequestsApprove->value,
                 PermissionEnum::TransfersAuthorize->value,
+                PermissionEnum::AssetsView->value,
             ],
             RoleEnum::Colaborador => [
                 PermissionEnum::BranchesView->value,
+                PermissionEnum::AssetsView->value,
             ],
         };
     }

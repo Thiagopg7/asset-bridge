@@ -42,10 +42,37 @@ export type Branch = {
     active: boolean;
 };
 
+export type AssetUnit = 'un' | 'cx' | 'kg' | 'lt' | 'm';
+
+export const ASSET_UNIT_LABELS: Record<AssetUnit, string> = {
+    un: 'Unidade',
+    cx: 'Caixa',
+    kg: 'Quilograma',
+    lt: 'Litro',
+    m: 'Metro',
+};
+
+export type Asset = {
+    id: number;
+    name: string;
+    description: string | null;
+    unit: AssetUnit;
+    active: boolean;
+};
+
+export type StockEntry = {
+    asset_id: number;
+    asset_name: string;
+    unit: AssetUnit;
+    quantity: number;
+};
+
 export type Can = {
     manageBranches: boolean;
     viewUsers: boolean;
     manageUsers: boolean;
+    viewAssets: boolean;
+    manageAssets: boolean;
 };
 
 export type UserListItem = {
