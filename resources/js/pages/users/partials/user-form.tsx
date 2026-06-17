@@ -45,7 +45,9 @@ export default function UserForm({
         password: '',
         password_confirmation: '',
         role: defaultValues?.role ?? '',
-        branch_id: defaultValues?.branch_id ? String(defaultValues.branch_id) : NONE,
+        branch_id: defaultValues?.branch_id
+            ? String(defaultValues.branch_id)
+            : NONE,
     });
 
     return (
@@ -92,7 +94,9 @@ export default function UserForm({
                         type="password"
                         value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
-                        placeholder={isEdit ? 'Deixe em branco para manter' : ''}
+                        placeholder={
+                            isEdit ? 'Deixe em branco para manter' : ''
+                        }
                         autoComplete="new-password"
                     />
                     {errors.password && (
@@ -139,7 +143,9 @@ export default function UserForm({
                         </SelectContent>
                     </Select>
                     {errors.role && (
-                        <p className="text-sm text-destructive">{errors.role}</p>
+                        <p className="text-sm text-destructive">
+                            {errors.role}
+                        </p>
                     )}
                 </div>
 

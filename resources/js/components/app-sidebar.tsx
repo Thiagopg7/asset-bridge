@@ -1,5 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Building2, FolderGit2, LayoutGrid, ShieldCheck, Users } from 'lucide-react';
+import {
+    BookOpen,
+    Building2,
+    FolderGit2,
+    LayoutGrid,
+    ShieldCheck,
+    Users,
+} from 'lucide-react';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import RoleController from '@/actions/App/Http/Controllers/RoleController';
 import UserController from '@/actions/App/Http/Controllers/UserController';
