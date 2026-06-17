@@ -32,3 +32,52 @@ export type TwoFactorSetupData = {
 export type TwoFactorSecretKey = {
     secretKey: string;
 };
+
+export type Branch = {
+    id: number;
+    name: string;
+    code: string;
+    city: string | null;
+    state: string | null;
+    active: boolean;
+};
+
+export type Can = {
+    manageBranches: boolean;
+    viewUsers: boolean;
+    manageUsers: boolean;
+};
+
+export type UserListItem = {
+    id: number;
+    name: string;
+    email: string;
+    branch_id: number | null;
+    branch: { id: number; name: string } | null;
+    role: string | null;
+};
+
+export type UserFormData = {
+    id: number;
+    name: string;
+    email: string;
+    branch_id: number | null;
+    role: string | null;
+};
+
+export type PaginationLink = {
+    url: string | null;
+    label: string;
+    active: boolean;
+};
+
+export type Paginated<T> = {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    from: number | null;
+    to: number | null;
+    links: PaginationLink[];
+};

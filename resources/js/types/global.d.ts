@@ -1,4 +1,4 @@
-import type { Auth } from '@/types/auth';
+import type { Auth, Can } from '@/types/auth';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,6 +12,7 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            can: Can;
             sidebarOpen: boolean;
             [key: string]: unknown;
         };
