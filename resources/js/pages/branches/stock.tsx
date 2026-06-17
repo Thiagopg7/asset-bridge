@@ -44,7 +44,10 @@ export default function BranchStock({ branch, stock, canUpdate }: Props) {
 
         setSaving(assetId);
         router.patch(
-            BranchStockController.update.url(branch.id, assetId),
+            BranchStockController.update.url({
+                branch: branch.id,
+                asset: assetId,
+            }),
             { quantity },
             {
                 preserveScroll: true,
