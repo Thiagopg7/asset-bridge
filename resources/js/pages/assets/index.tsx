@@ -1,8 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { PackageIcon, PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
-import BranchController from '@/actions/App/Http/Controllers/BranchController';
-import BranchStockController from '@/actions/App/Http/Controllers/BranchStockController';
+import AssetController from '@/actions/App/Http/Controllers/AssetController';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,15 +21,16 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { Branch, Can, Paginated } from '@/types';
+import { ASSET_UNIT_LABELS } from '@/types';
+import type { Asset, Paginated } from '@/types';
 
 type Props = {
-    branches: Paginated<Branch>;
+    assets: Paginated<Asset>;
 };
 
-export default function BranchesIndex({ branches }: Props) {
-    const { can } = usePage<{ can: Can }>().props;
-    const [deleting, setDeleting] = useState<Branch | null>(null);
+export default function AssetsIndex({ assets }: Props) {
+    const { can } = usePage().props;
+    const [deleting, setDeleting] = useState<Asset | null>(null);
     const [processing, setProcessing] = useState(false);
 
     function handleDelete() {
@@ -39,7 +39,7 @@ export default function BranchesIndex({ branches }: Props) {
         }
 
         setProcessing(true);
-        router.delete(BranchController.destroy.url(deleting.id), {
+        router.delete(AssetController.destroy.url(deleting.id), {
             onFinish: () => {
                 setProcessing(false);
                 setDeleting(null);
@@ -49,20 +49,22 @@ export default function BranchesIndex({ branches }: Props) {
 
     return (
         <>
-            <Head title="Filiais" />
+            <Head title="Ativos" />
 
             <div className="space-y-6 px-4 py-6">
                 <div className="flex items-center justify-between">
                     <Heading
-                        title="Filiais"
-                        description="Gerencie as filiais da empresa"
+                        title="Ativos"
+                        description="Catálogo global de ativos da empresa"
                     />
-                    <Button asChild size="sm">
-                        <Link href={BranchController.create.url()}>
-                            <PlusIcon className="mr-2 h-4 w-4" />
-                            Nova filial
-                        </Link>
-                    </Button>
+                    {can.manageAssets && (
+                        <Button asChild size="sm">
+                            <Link href={AssetController.create.url()}>
+                                <PlusIcon className="mr-2 h-4 w-4" />
+                                Novo ativo
+                            </Link>
+                        </Button>
+                    )}
                 </div>
 
                 <div className="rounded-lg border">
@@ -70,110 +72,98 @@ export default function BranchesIndex({ branches }: Props) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Nome</TableHead>
-                                <TableHead>Código</TableHead>
-                                <TableHead>Cidade</TableHead>
-                                <TableHead>UF</TableHead>
+                                <TableHead>Descrição</TableHead>
+                                <TableHead>Unidade</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead className="w-[140px]" />
+                                {can.manageAssets && (
+                                    <TableHead className="w-[100px]" />
+                                )}
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {branches.data.length === 0 && (
+                            {assets.data.length === 0 && (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={6}
+                                        colSpan={can.manageAssets ? 5 : 4}
                                         className="py-10 text-center text-muted-foreground"
                                     >
-                                        Nenhuma filial cadastrada.
+                                        Nenhum ativo cadastrado.
                                     </TableCell>
                                 </TableRow>
                             )}
-                            {branches.data.map((branch) => (
-                                <TableRow key={branch.id}>
+                            {assets.data.map((asset) => (
+                                <TableRow key={asset.id}>
                                     <TableCell className="font-medium">
-                                        {branch.name}
+                                        {asset.name}
                                     </TableCell>
-                                    <TableCell className="font-mono text-sm">
-                                        {branch.code}
+                                    <TableCell className="text-muted-foreground">
+                                        {asset.description ?? '—'}
                                     </TableCell>
-                                    <TableCell>{branch.city ?? '—'}</TableCell>
-                                    <TableCell>{branch.state ?? '—'}</TableCell>
                                     <TableCell>
-                                        {branch.active ? (
+                                        <Badge variant="outline">
+                                            {ASSET_UNIT_LABELS[asset.unit]}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        {asset.active ? (
                                             <Badge variant="default">
-                                                Ativa
+                                                Ativo
                                             </Badge>
                                         ) : (
                                             <Badge variant="secondary">
-                                                Inativa
+                                                Inativo
                                             </Badge>
                                         )}
                                     </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            {can.viewAssets && (
+                                    {can.manageAssets && (
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={BranchStockController.index.url(
-                                                            branch.id,
+                                                        href={AssetController.edit.url(
+                                                            asset.id,
                                                         )}
                                                     >
-                                                        <PackageIcon className="h-4 w-4" />
+                                                        <PencilIcon className="h-4 w-4" />
                                                         <span className="sr-only">
-                                                            Estoque
+                                                            Editar
                                                         </span>
                                                     </Link>
                                                 </Button>
-                                            )}
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                asChild
-                                            >
-                                                <Link
-                                                    href={BranchController.edit.url(
-                                                        branch.id,
-                                                    )}
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="text-destructive hover:text-destructive"
+                                                    onClick={() =>
+                                                        setDeleting(asset)
+                                                    }
                                                 >
-                                                    <PencilIcon className="h-4 w-4" />
+                                                    <Trash2Icon className="h-4 w-4" />
                                                     <span className="sr-only">
-                                                        Editar
+                                                        Excluir
                                                     </span>
-                                                </Link>
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="text-destructive hover:text-destructive"
-                                                onClick={() =>
-                                                    setDeleting(branch)
-                                                }
-                                            >
-                                                <Trash2Icon className="h-4 w-4" />
-                                                <span className="sr-only">
-                                                    Excluir
-                                                </span>
-                                            </Button>
-                                        </div>
-                                    </TableCell>
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    )}
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </div>
 
-                {branches.last_page > 1 && (
+                {assets.last_page > 1 && (
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>
-                            Exibindo {branches.from}–{branches.to} de{' '}
-                            {branches.total} filiais
+                            Exibindo {assets.from}–{assets.to} de {assets.total}{' '}
+                            ativos
                         </span>
                         <div className="flex gap-1">
-                            {branches.links.map((link, i) => (
+                            {assets.links.map((link, i) => (
                                 <Button
                                     key={i}
                                     variant={
@@ -210,14 +200,14 @@ export default function BranchesIndex({ branches }: Props) {
             >
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Excluir filial</DialogTitle>
+                        <DialogTitle>Excluir ativo</DialogTitle>
                         <DialogDescription>
                             Tem certeza que deseja excluir{' '}
                             <span className="font-semibold">
                                 {deleting?.name}
                             </span>
-                            ? Os colaboradores vinculados perderão o vínculo com
-                            a filial. Esta ação não pode ser desfeita.
+                            ? Esta ação removerá o ativo do catálogo e de todos
+                            os estoques. Não pode ser desfeita.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -242,6 +232,6 @@ export default function BranchesIndex({ branches }: Props) {
     );
 }
 
-BranchesIndex.layout = {
-    breadcrumbs: [{ title: 'Filiais', href: BranchController.index.url() }],
+AssetsIndex.layout = {
+    breadcrumbs: [{ title: 'Ativos', href: AssetController.index.url() }],
 };
