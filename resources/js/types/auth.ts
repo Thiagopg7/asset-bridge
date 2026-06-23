@@ -68,6 +68,7 @@ export type StockEntry = {
 };
 
 export type Can = {
+    viewBranches: boolean;
     manageBranches: boolean;
     viewUsers: boolean;
     manageUsers: boolean;

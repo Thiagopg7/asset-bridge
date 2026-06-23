@@ -1,7 +1,8 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import { PackageIcon, PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
+import BranchStockController from '@/actions/App/Http/Controllers/BranchStockController';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,13 +22,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { Branch, Paginated } from '@/types';
+import type { Branch, Can, Paginated } from '@/types';
 
 type Props = {
     branches: Paginated<Branch>;
 };
 
 export default function BranchesIndex({ branches }: Props) {
+    const { can } = usePage<{ can: Can }>().props;
     const [deleting, setDeleting] = useState<Branch | null>(null);
     const [processing, setProcessing] = useState(false);
 
@@ -72,7 +74,7 @@ export default function BranchesIndex({ branches }: Props) {
                                 <TableHead>Cidade</TableHead>
                                 <TableHead>UF</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead className="w-[100px]" />
+                                <TableHead className="w-[140px]" />
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -109,6 +111,24 @@ export default function BranchesIndex({ branches }: Props) {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
+                                            {can.viewAssets && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                >
+                                                    <Link
+                                                        href={BranchStockController.index.url(
+                                                            branch.id,
+                                                        )}
+                                                    >
+                                                        <PackageIcon className="h-4 w-4" />
+                                                        <span className="sr-only">
+                                                            Estoque
+                                                        </span>
+                                                    </Link>
+                                                </Button>
+                                            )}
                                             <Button
                                                 variant="ghost"
                                                 size="icon"

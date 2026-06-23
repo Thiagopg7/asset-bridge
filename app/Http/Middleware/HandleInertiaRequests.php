@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'can' => [
+                'viewBranches' => $request->user()?->can(Permission::BranchesView->value) ?? false,
                 'manageBranches' => $request->user()?->can(Permission::BranchesManage->value) ?? false,
                 'viewUsers' => $request->user()?->can(Permission::UsersView->value) ?? false,
                 'manageUsers' => $request->user()?->can(Permission::UsersManage->value) ?? false,

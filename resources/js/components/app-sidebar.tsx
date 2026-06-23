@@ -50,7 +50,7 @@ export function AppSidebar() {
             href: dashboard(),
             icon: LayoutGrid,
         },
-        ...(can.manageBranches
+        ...(can.viewBranches
             ? [
                   {
                       title: 'Filiais',
