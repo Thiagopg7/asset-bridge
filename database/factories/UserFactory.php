@@ -104,6 +104,14 @@ class UserFactory extends Factory
     }
 
     /**
+     * Assign the logistica role to the user.
+     */
+    public function logistica(): static
+    {
+        return $this->withRole(RoleEnum::Logistica);
+    }
+
+    /**
      * Assign the given role to the user after creation, creating it if needed.
      */
     protected function withRole(RoleEnum $role): static

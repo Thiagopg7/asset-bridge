@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ShipmentStatus;
 use App\Enums\TransferStatus;
 use App\Http\Requests\StoreTransferRequest;
 use App\Models\AssetRequest;
+use App\Models\Shipment;
 use App\Models\Transfer;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
@@ -102,6 +104,13 @@ class TransferController extends Controller
                 'status' => TransferStatus::Authorized,
                 'reviewed_by' => auth()->id(),
                 'reviewed_at' => now(),
+            ]);
+
+            Shipment::create([
+                'transfer_id' => $transfer->id,
+                'origin_branch_id' => $offer->branch_id,
+                'destination_branch_id' => $transfer->branch_id,
+                'status' => ShipmentStatus::Ready,
             ]);
 
             return true;

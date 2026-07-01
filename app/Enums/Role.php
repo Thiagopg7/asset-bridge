@@ -8,6 +8,7 @@ enum Role: string
     case Diretor = 'diretor';
     case Gerente = 'gerente';
     case Colaborador = 'colaborador';
+    case Logistica = 'logistica';
 
     /**
      * All role values.

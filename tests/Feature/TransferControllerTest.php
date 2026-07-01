@@ -99,6 +99,13 @@ it('lets the destination manager authorize and draws down the offer balance', fu
 
     expect($transfer->fresh()->status)->toBe(TransferStatus::Authorized);
     expect($this->offer->fresh()->available_quantity)->toBe(12);
+
+    $this->assertDatabaseHas('shipments', [
+        'transfer_id' => $transfer->id,
+        'origin_branch_id' => $this->offerBranch->id,
+        'destination_branch_id' => $this->destinationBranch->id,
+        'status' => 'ready',
+    ]);
 });
 
 it('does not authorize a transfer that exceeds the remaining balance', function () {
