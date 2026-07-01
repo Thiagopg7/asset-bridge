@@ -93,6 +93,40 @@ class AssetRequestController extends Controller
     }
 
     /**
+     * Display the details of a single request.
+     */
+    public function show(AssetRequest $assetRequest): Response
+    {
+        $this->authorize('view', $assetRequest);
+
+        $user = auth()->user();
+
+        $assetRequest->load(['asset:id,name,unit', 'branch:id,name', 'user:id,name', 'reviewer:id,name']);
+
+        return Inertia::render('asset-requests/show', [
+            'request' => [
+                'id' => $assetRequest->id,
+                'type' => $assetRequest->type->value,
+                'type_label' => $assetRequest->type->label(),
+                'status' => $assetRequest->status->value,
+                'status_label' => $assetRequest->status->label(),
+                'quantity' => $assetRequest->quantity,
+                'notes' => $assetRequest->notes,
+                'asset_name' => $assetRequest->asset->name,
+                'unit' => $assetRequest->asset->unit->value,
+                'branch_name' => $assetRequest->branch->name,
+                'user_name' => $assetRequest->user->name,
+                'reviewer_name' => $assetRequest->reviewer?->name,
+                'reviewed_at' => $assetRequest->reviewed_at,
+                'created_at' => $assetRequest->created_at,
+                'can_review' => $user->can('review', $assetRequest),
+                'can_edit' => $user->can('update', $assetRequest),
+                'can_delete' => $user->can('delete', $assetRequest),
+            ],
+        ]);
+    }
+
+    /**
      * Show the form for editing a pending request.
      */
     public function edit(AssetRequest $assetRequest): Response

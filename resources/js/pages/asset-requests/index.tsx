@@ -137,7 +137,14 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="font-medium">
-                                        {request.asset_name}
+                                        <Link
+                                            href={AssetRequestController.show.url(
+                                                request.id,
+                                            )}
+                                            className="hover:underline"
+                                        >
+                                            {request.asset_name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
                                         {request.quantity}{' '}

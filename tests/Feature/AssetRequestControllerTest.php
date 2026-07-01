@@ -115,6 +115,30 @@ it('allows a surplus offer within the branch available stock', function () {
     expect(AssetRequest::count())->toBe(1);
 });
 
+// show
+it('lets a gerente view the details of a request from their branch', function () {
+    $gerente = User::factory()->gerente()->forBranch($this->branch)->create();
+    $request = AssetRequest::factory()->need()->for($this->branch)->for($this->asset)->create();
+
+    $this->actingAs($gerente)
+        ->get("/asset-requests/{$request->id}")
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('asset-requests/show')
+            ->where('request.id', $request->id)
+            ->where('request.can_review', true)
+        );
+});
+
+it('denies viewing the details of a request from another branch', function () {
+    $gerente = User::factory()->gerente()->forBranch($this->branch)->create();
+    $request = AssetRequest::factory()->need()->for($this->otherBranch)->for($this->asset)->create();
+
+    $this->actingAs($gerente)
+        ->get("/asset-requests/{$request->id}")
+        ->assertForbidden();
+});
+
 // edit / update
 it('allows the author to edit their own pending request', function () {
     $user = User::factory()->colaborador()->forBranch($this->branch)->create();
