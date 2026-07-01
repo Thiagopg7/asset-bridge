@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
     Building2,
+    ClipboardList,
     FolderGit2,
     LayoutGrid,
     Package,
@@ -9,6 +10,7 @@ import {
     Users,
 } from 'lucide-react';
 import AssetController from '@/actions/App/Http/Controllers/AssetController';
+import AssetRequestController from '@/actions/App/Http/Controllers/AssetRequestController';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import RoleController from '@/actions/App/Http/Controllers/RoleController';
 import UserController from '@/actions/App/Http/Controllers/UserController';
@@ -65,6 +67,15 @@ export function AppSidebar() {
                       title: 'Ativos',
                       href: AssetController.index.url(),
                       icon: Package,
+                  },
+              ]
+            : []),
+        ...(can.viewRequests
+            ? [
+                  {
+                      title: 'Solicitações',
+                      href: AssetRequestController.index.url(),
+                      icon: ClipboardList,
                   },
               ]
             : []),

@@ -9,6 +9,8 @@ enum Permission: string
     case UsersView = 'users.view';
     case UsersManage = 'users.manage';
     case RolesAssign = 'roles.assign';
+    case RequestsView = 'requests.view';
+    case RequestsCreate = 'requests.create';
     case RequestsApprove = 'requests.approve';
     case TransfersAuthorize = 'transfers.authorize';
     case DispatchExecute = 'dispatch.execute';
