@@ -141,6 +141,16 @@ export type MarketplaceOffer = {
     created_at: string;
 };
 
+export type MarketplaceNeed = {
+    id: number;
+    asset_name: string;
+    unit: AssetUnit;
+    branch_name: string;
+    quantity: number;
+    notes: string | null;
+    created_at: string;
+};
+
 export type TransferStatus = 'pending' | 'authorized' | 'rejected';
 
 export const TRANSFER_STATUS_LABELS: Record<TransferStatus, string> = {

@@ -30,7 +30,7 @@ class MarketplaceController extends Controller
             ->when($user->branch_id, fn ($query) => $query->where('branch_id', '!=', $user->branch_id))
             ->with(['asset:id,name,unit', 'branch:id,name'])
             ->latest()
-            ->paginate(15)
+            ->paginate(10, ['*'], 'offers_page')
             ->through(fn (AssetRequest $offer) => [
                 'id' => $offer->id,
                 'asset_name' => $offer->asset->name,
@@ -42,8 +42,26 @@ class MarketplaceController extends Controller
                 'created_at' => $offer->created_at,
             ]);
 
+        $needs = AssetRequest::query()
+            ->where('type', AssetRequestType::Need)
+            ->where('status', AssetRequestStatus::Approved)
+            ->when($user->branch_id, fn ($query) => $query->where('branch_id', '!=', $user->branch_id))
+            ->with(['asset:id,name,unit', 'branch:id,name'])
+            ->latest()
+            ->paginate(10, ['*'], 'needs_page')
+            ->through(fn (AssetRequest $need) => [
+                'id' => $need->id,
+                'asset_name' => $need->asset->name,
+                'unit' => $need->asset->unit->value,
+                'branch_name' => $need->branch->name,
+                'quantity' => $need->quantity,
+                'notes' => $need->notes,
+                'created_at' => $need->created_at,
+            ]);
+
         return Inertia::render('marketplace/index', [
             'offers' => $offers,
+            'needs' => $needs,
             'canRequest' => $user->can('create', Transfer::class),
         ]);
     }

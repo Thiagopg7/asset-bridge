@@ -40,6 +40,25 @@ it('lists available offers from other branches only', function () {
         );
 });
 
+it('lists approved needs from other branches only', function () {
+    $user = User::factory()->colaborador()->forBranch($this->destinationBranch)->create();
+
+    $otherNeed = AssetRequest::factory()->need()->approved()->for($this->offerBranch)->for($this->asset)
+        ->create(['quantity' => 6]);
+    // Own branch need and a pending need must not appear.
+    AssetRequest::factory()->need()->approved()->for($this->destinationBranch)->for($this->asset)->create();
+    AssetRequest::factory()->need()->for($this->offerBranch)->for($this->asset)->create();
+
+    $this->actingAs($user)
+        ->get('/marketplace')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('marketplace/index')
+            ->has('needs.data', 1)
+            ->where('needs.data.0.id', $otherNeed->id)
+        );
+});
+
 // store
 it('lets a collaborator request a transfer against another branch offer', function () {
     $user = User::factory()->colaborador()->forBranch($this->destinationBranch)->create();
