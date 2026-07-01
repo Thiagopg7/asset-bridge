@@ -115,6 +115,57 @@ it('allows a surplus offer within the branch available stock', function () {
     expect(AssetRequest::count())->toBe(1);
 });
 
+// edit / update
+it('allows the author to edit their own pending request', function () {
+    $user = User::factory()->colaborador()->forBranch($this->branch)->create();
+    $request = AssetRequest::factory()->need()->for($this->branch)->for($this->asset)->for($user)
+        ->create(['quantity' => 5]);
+
+    $this->actingAs($user)
+        ->patch("/asset-requests/{$request->id}", [
+            'asset_id' => $this->asset->id,
+            'type' => 'need',
+            'quantity' => 12,
+            'notes' => 'Quantidade revisada.',
+        ])
+        ->assertRedirect('/asset-requests');
+
+    expect($request->fresh())
+        ->quantity->toBe(12)
+        ->notes->toBe('Quantidade revisada.');
+});
+
+it('denies editing a request that was already reviewed', function () {
+    $user = User::factory()->colaborador()->forBranch($this->branch)->create();
+    $request = AssetRequest::factory()->need()->approved()->for($this->branch)->for($this->asset)->for($user)
+        ->create(['quantity' => 5]);
+
+    $this->actingAs($user)
+        ->patch("/asset-requests/{$request->id}", [
+            'asset_id' => $this->asset->id,
+            'type' => 'need',
+            'quantity' => 12,
+        ])
+        ->assertForbidden();
+
+    expect($request->fresh()->quantity)->toBe(5);
+});
+
+it('denies a user from editing a request they did not create', function () {
+    $user = User::factory()->colaborador()->forBranch($this->branch)->create();
+    $other = User::factory()->colaborador()->forBranch($this->branch)->create();
+    $request = AssetRequest::factory()->need()->for($this->branch)->for($this->asset)->for($other)
+        ->create(['quantity' => 5]);
+
+    $this->actingAs($user)
+        ->patch("/asset-requests/{$request->id}", [
+            'asset_id' => $this->asset->id,
+            'type' => 'need',
+            'quantity' => 12,
+        ])
+        ->assertForbidden();
+});
+
 // approve / reject
 it('allows a gerente to approve a request from their own branch', function () {
     $gerente = User::factory()->gerente()->forBranch($this->branch)->create();

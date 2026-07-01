@@ -116,6 +116,7 @@ export type AssetRequestListItem = {
     user_name: string;
     created_at: string;
     can_review: boolean;
+    can_edit: boolean;
     can_delete: boolean;
 };
 

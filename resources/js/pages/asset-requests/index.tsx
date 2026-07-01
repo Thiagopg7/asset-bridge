@@ -1,5 +1,11 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { CheckIcon, PlusIcon, Trash2Icon, XIcon } from 'lucide-react';
+import {
+    CheckIcon,
+    PencilIcon,
+    PlusIcon,
+    Trash2Icon,
+    XIcon,
+} from 'lucide-react';
 import { useState } from 'react';
 import AssetRequestController from '@/actions/App/Http/Controllers/AssetRequestController';
 import Heading from '@/components/heading';
@@ -189,6 +195,24 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                                         </span>
                                                     </Button>
                                                 </>
+                                            )}
+                                            {request.can_edit && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                >
+                                                    <Link
+                                                        href={AssetRequestController.edit.url(
+                                                            request.id,
+                                                        )}
+                                                    >
+                                                        <PencilIcon className="h-4 w-4" />
+                                                        <span className="sr-only">
+                                                            Editar
+                                                        </span>
+                                                    </Link>
+                                                </Button>
                                             )}
                                             {request.can_delete && (
                                                 <Button

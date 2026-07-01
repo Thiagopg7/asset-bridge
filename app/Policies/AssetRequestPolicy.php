@@ -59,6 +59,17 @@ class AssetRequestPolicy
     }
 
     /**
+     * Determine whether the user can edit the request.
+     *
+     * The author may edit their own request while it is still pending.
+     */
+    public function update(User $user, AssetRequest $assetRequest): bool
+    {
+        return $assetRequest->isPending()
+            && $assetRequest->user_id === $user->id;
+    }
+
+    /**
      * Determine whether the user can delete (cancel) the request.
      *
      * The author may cancel their own pending request; admin may cancel any.

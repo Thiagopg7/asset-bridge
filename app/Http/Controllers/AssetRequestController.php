@@ -44,6 +44,7 @@ class AssetRequestController extends Controller
                 'user_name' => $request->user->name,
                 'created_at' => $request->created_at,
                 'can_review' => $user->can('review', $request),
+                'can_edit' => $user->can('update', $request),
                 'can_delete' => $user->can('delete', $request),
             ]);
 
@@ -87,6 +88,47 @@ class AssetRequestController extends Controller
         ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Solicitação criada com sucesso.']);
+
+        return to_route('asset-requests.index');
+    }
+
+    /**
+     * Show the form for editing a pending request.
+     */
+    public function edit(AssetRequest $assetRequest): Response
+    {
+        $this->authorize('update', $assetRequest);
+
+        return Inertia::render('asset-requests/edit', [
+            'assetRequest' => [
+                'id' => $assetRequest->id,
+                'asset_id' => $assetRequest->asset_id,
+                'type' => $assetRequest->type->value,
+                'quantity' => $assetRequest->quantity,
+                'notes' => $assetRequest->notes,
+            ],
+            'assets' => Asset::query()
+                ->where('active', true)
+                ->orderBy('name')
+                ->get(['id', 'name', 'unit']),
+            'types' => collect(AssetRequestType::cases())
+                ->map(fn (AssetRequestType $type) => [
+                    'value' => $type->value,
+                    'label' => $type->label(),
+                ]),
+        ]);
+    }
+
+    /**
+     * Update the given pending request.
+     */
+    public function update(StoreAssetRequestRequest $request, AssetRequest $assetRequest): RedirectResponse
+    {
+        $this->authorize('update', $assetRequest);
+
+        $assetRequest->update($request->validated());
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Solicitação atualizada com sucesso.']);
 
         return to_route('asset-requests.index');
     }
