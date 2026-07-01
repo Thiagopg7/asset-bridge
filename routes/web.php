@@ -4,7 +4,9 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetRequestController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BranchStockController;
+use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +24,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('asset-requests', AssetRequestController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::patch('asset-requests/{assetRequest}/approve', [AssetRequestController::class, 'approve'])->name('asset-requests.approve');
     Route::patch('asset-requests/{assetRequest}/reject', [AssetRequestController::class, 'reject'])->name('asset-requests.reject');
+
+    Route::get('marketplace', [MarketplaceController::class, 'index'])->name('marketplace.index');
+    Route::post('marketplace/{assetRequest}/transfers', [TransferController::class, 'store'])->name('transfers.store');
+
+    Route::get('transfers', [TransferController::class, 'index'])->name('transfers.index');
+    Route::patch('transfers/{transfer}/authorize', [TransferController::class, 'authorizeTransfer'])->name('transfers.authorize');
+    Route::patch('transfers/{transfer}/reject', [TransferController::class, 'reject'])->name('transfers.reject');
+    Route::delete('transfers/{transfer}', [TransferController::class, 'destroy'])->name('transfers.destroy');
 
     Route::resource('users', UserController::class)->except('show');
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
