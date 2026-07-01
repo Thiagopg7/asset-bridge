@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['branch_id', 'user_id', 'asset_id', 'type', 'quantity', 'notes', 'status', 'reviewed_by', 'reviewed_at'])]
+#[Fillable(['branch_id', 'user_id', 'asset_id', 'type', 'quantity', 'available_quantity', 'notes', 'status', 'reviewed_by', 'reviewed_at'])]
 class AssetRequest extends Model
 {
     /** @use HasFactory<AssetRequestFactory> */
@@ -27,6 +28,7 @@ class AssetRequest extends Model
             'type' => AssetRequestType::class,
             'status' => AssetRequestStatus::class,
             'quantity' => 'integer',
+            'available_quantity' => 'integer',
             'reviewed_at' => 'datetime',
         ];
     }
@@ -72,10 +74,30 @@ class AssetRequest extends Model
     }
 
     /**
+     * Transfer requests placed against this offer.
+     *
+     * @return HasMany<Transfer, $this>
+     */
+    public function transfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class);
+    }
+
+    /**
      * Determine whether the request is still awaiting review.
      */
     public function isPending(): bool
     {
         return $this->status === AssetRequestStatus::Pending;
+    }
+
+    /**
+     * Determine whether this is an approved surplus offer still available for transfer.
+     */
+    public function isAvailableOffer(): bool
+    {
+        return $this->type === AssetRequestType::Surplus
+            && $this->status === AssetRequestStatus::Approved
+            && ($this->available_quantity ?? 0) > 0;
     }
 }
