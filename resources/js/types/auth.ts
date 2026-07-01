@@ -3,6 +3,7 @@ export type User = {
     name: string;
     email: string;
     avatar?: string;
+    branch_id: number | null;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
     created_at: string;
@@ -70,6 +71,7 @@ export type StockEntry = {
 export type Can = {
     viewBranches: boolean;
     manageBranches: boolean;
+    viewOwnStock: boolean;
     viewUsers: boolean;
     manageUsers: boolean;
     viewAssets: boolean;

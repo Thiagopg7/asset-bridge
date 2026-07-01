@@ -10,12 +10,12 @@ beforeEach(function () {
     $this->otherBranch = Branch::factory()->create();
 });
 
-it('lets a colaborador view only its own branch', function () {
+it('forbids a colaborador from viewing branches', function () {
     $user = User::factory()->colaborador()->forBranch($this->branch)->create();
 
-    expect($user->can('view', $this->branch))->toBeTrue();
+    expect($user->can('view', $this->branch))->toBeFalse();
     expect($user->can('view', $this->otherBranch))->toBeFalse();
-    expect($user->can('viewAny', Branch::class))->toBeTrue();
+    expect($user->can('viewAny', Branch::class))->toBeFalse();
 });
 
 it('lets an admin view and manage every branch', function () {

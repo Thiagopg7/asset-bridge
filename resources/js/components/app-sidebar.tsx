@@ -11,10 +11,12 @@ import {
     Store,
     Truck,
     Users,
+    Warehouse,
 } from 'lucide-react';
 import AssetController from '@/actions/App/Http/Controllers/AssetController';
 import AssetRequestController from '@/actions/App/Http/Controllers/AssetRequestController';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
+import BranchStockController from '@/actions/App/Http/Controllers/BranchStockController';
 import MarketplaceController from '@/actions/App/Http/Controllers/MarketplaceController';
 import RoleController from '@/actions/App/Http/Controllers/RoleController';
 import ShipmentController from '@/actions/App/Http/Controllers/ShipmentController';
@@ -50,7 +52,7 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-    const { can } = usePage().props;
+    const { auth, can } = usePage().props;
 
     const mainNavItems: NavItem[] = [
         {
@@ -73,6 +75,17 @@ export function AppSidebar() {
                       title: 'Ativos',
                       href: AssetController.index.url(),
                       icon: Package,
+                  },
+              ]
+            : []),
+        ...(can.viewOwnStock && auth.user.branch_id !== null
+            ? [
+                  {
+                      title: 'Estoque',
+                      href: BranchStockController.index.url(
+                          auth.user.branch_id,
+                      ),
+                      icon: Warehouse,
                   },
               ]
             : []),
