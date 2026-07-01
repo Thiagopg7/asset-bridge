@@ -69,7 +69,7 @@ it('denies the destination branch from dispatching', function () {
 });
 
 // receive (stock movement)
-it('moves stock between branches when the destination confirms receipt', function () {
+it('reduces only the origin stock when the destination confirms receipt', function () {
     $logistica = User::factory()->logistica()->forBranch($this->destinationBranch)->create();
     $shipment = Shipment::factory()->forTransfer($this->transfer)->inTransit()->create();
 
@@ -87,14 +87,15 @@ it('moves stock between branches when the destination confirms receipt', functio
         'asset_id' => $this->asset->id,
         'quantity' => 7,
     ]);
+    // O destino não é creditado: o estoque representa apenas sobras.
     $this->assertDatabaseHas('stock_items', [
         'branch_id' => $this->destinationBranch->id,
         'asset_id' => $this->asset->id,
-        'quantity' => 8,
+        'quantity' => 3,
     ]);
 });
 
-it('creates the destination stock item when it does not exist yet', function () {
+it('does not create or credit destination stock on receipt', function () {
     $logistica = User::factory()->logistica()->forBranch($this->destinationBranch)->create();
     $shipment = Shipment::factory()->forTransfer($this->transfer)->inTransit()->create();
 
@@ -105,9 +106,13 @@ it('creates the destination stock item when it does not exist yet', function () 
         ->assertRedirect('/shipments');
 
     $this->assertDatabaseHas('stock_items', [
-        'branch_id' => $this->destinationBranch->id,
+        'branch_id' => $this->originBranch->id,
         'asset_id' => $this->asset->id,
         'quantity' => 5,
+    ]);
+    $this->assertDatabaseMissing('stock_items', [
+        'branch_id' => $this->destinationBranch->id,
+        'asset_id' => $this->asset->id,
     ]);
 });
 

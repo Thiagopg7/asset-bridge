@@ -97,6 +97,9 @@ class ShipmentController extends Controller
             $assetId = $locked->transfer->assetRequest->asset_id;
             $quantity = $locked->transfer->quantity;
 
+            // Só reduz o estoque da origem: o inventário representa apenas sobras,
+            // então creditar no destino sinalizaria uma sobra falsa quando ele, na
+            // verdade, apenas supriu uma necessidade.
             $originStock = StockItem::query()
                 ->where('branch_id', $locked->origin_branch_id)
                 ->where('asset_id', $assetId)
@@ -105,22 +108,6 @@ class ShipmentController extends Controller
 
             if ($originStock !== null) {
                 $originStock->decrement('quantity', min($quantity, $originStock->quantity));
-            }
-
-            $destinationStock = StockItem::query()
-                ->where('branch_id', $locked->destination_branch_id)
-                ->where('asset_id', $assetId)
-                ->lockForUpdate()
-                ->first();
-
-            if ($destinationStock !== null) {
-                $destinationStock->increment('quantity', $quantity);
-            } else {
-                StockItem::create([
-                    'branch_id' => $locked->destination_branch_id,
-                    'asset_id' => $assetId,
-                    'quantity' => $quantity,
-                ]);
             }
 
             $locked->update([
