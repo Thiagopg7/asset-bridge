@@ -55,6 +55,9 @@ class HandleInertiaRequests extends Middleware
                 'viewTransfers' => $request->user()?->can(Permission::TransfersView->value) ?? false,
                 'createTransfers' => ($request->user()?->can(Permission::TransfersCreate->value) ?? false) && $request->user()?->branch_id !== null,
                 'authorizeTransfers' => $request->user()?->can(Permission::TransfersAuthorize->value) ?? false,
+                'viewShipments' => $request->user()?->can(Permission::DispatchView->value) ?? false,
+                'executeDispatch' => $request->user()?->can(Permission::DispatchExecute->value) ?? false,
+                'receiveShipments' => $request->user()?->can(Permission::DispatchReceive->value) ?? false,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];

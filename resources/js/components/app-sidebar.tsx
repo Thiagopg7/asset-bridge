@@ -9,6 +9,7 @@ import {
     Package,
     ShieldCheck,
     Store,
+    Truck,
     Users,
 } from 'lucide-react';
 import AssetController from '@/actions/App/Http/Controllers/AssetController';
@@ -16,6 +17,7 @@ import AssetRequestController from '@/actions/App/Http/Controllers/AssetRequestC
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
 import MarketplaceController from '@/actions/App/Http/Controllers/MarketplaceController';
 import RoleController from '@/actions/App/Http/Controllers/RoleController';
+import ShipmentController from '@/actions/App/Http/Controllers/ShipmentController';
 import TransferController from '@/actions/App/Http/Controllers/TransferController';
 import UserController from '@/actions/App/Http/Controllers/UserController';
 import AppLogo from '@/components/app-logo';
@@ -94,6 +96,15 @@ export function AppSidebar() {
                       title: 'Transferências',
                       href: TransferController.index.url(),
                       icon: ArrowLeftRight,
+                  },
+              ]
+            : []),
+        ...(can.viewShipments
+            ? [
+                  {
+                      title: 'Expedição',
+                      href: ShipmentController.index.url(),
+                      icon: Truck,
                   },
               ]
             : []),
