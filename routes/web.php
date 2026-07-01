@@ -6,6 +6,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BranchStockController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('transfers/{transfer}/authorize', [TransferController::class, 'authorizeTransfer'])->name('transfers.authorize');
     Route::patch('transfers/{transfer}/reject', [TransferController::class, 'reject'])->name('transfers.reject');
     Route::delete('transfers/{transfer}', [TransferController::class, 'destroy'])->name('transfers.destroy');
+
+    Route::get('shipments', [ShipmentController::class, 'index'])->name('shipments.index');
+    Route::patch('shipments/{shipment}/dispatch', [ShipmentController::class, 'dispatch'])->name('shipments.dispatch');
+    Route::patch('shipments/{shipment}/receive', [ShipmentController::class, 'receive'])->name('shipments.receive');
 
     Route::resource('users', UserController::class)->except('show');
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');

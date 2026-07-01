@@ -80,6 +80,9 @@ export type Can = {
     viewTransfers: boolean;
     createTransfers: boolean;
     authorizeTransfers: boolean;
+    viewShipments: boolean;
+    executeDispatch: boolean;
+    receiveShipments: boolean;
 };
 
 export type AssetRequestType = 'need' | 'surplus';
@@ -158,6 +161,28 @@ export type TransferListItem = {
     created_at: string;
     can_review: boolean;
     can_delete: boolean;
+};
+
+export type ShipmentStatus = 'ready' | 'in_transit' | 'received';
+
+export const SHIPMENT_STATUS_LABELS: Record<ShipmentStatus, string> = {
+    ready: 'Pronto para envio',
+    in_transit: 'Em trânsito',
+    received: 'Recebido',
+};
+
+export type ShipmentListItem = {
+    id: number;
+    asset_name: string;
+    unit: AssetUnit;
+    quantity: number;
+    origin_branch_name: string;
+    destination_branch_name: string;
+    status: ShipmentStatus;
+    status_label: string;
+    created_at: string;
+    can_dispatch: boolean;
+    can_receive: boolean;
 };
 
 export type UserListItem = {
