@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -60,5 +61,13 @@ class User extends Authenticatable implements PasskeyUser
     public function isManagerOf(Branch $branch): bool
     {
         return $this->hasRole('gerente') && $this->belongsToBranch($branch);
+    }
+
+    /**
+     * Determine whether the user has cross-branch visibility (admin/diretor).
+     */
+    public function managesAllBranches(): bool
+    {
+        return $this->hasAnyRole([Role::Admin->value, Role::Diretor->value]);
     }
 }

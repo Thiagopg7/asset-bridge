@@ -74,6 +74,52 @@ export type Can = {
     manageUsers: boolean;
     viewAssets: boolean;
     manageAssets: boolean;
+    viewRequests: boolean;
+    createRequests: boolean;
+    approveRequests: boolean;
+};
+
+export type AssetRequestType = 'need' | 'surplus';
+
+export const ASSET_REQUEST_TYPE_LABELS: Record<AssetRequestType, string> = {
+    need: 'Necessidade',
+    surplus: 'Excesso',
+};
+
+export type AssetRequestStatus = 'pending' | 'approved' | 'rejected';
+
+export const ASSET_REQUEST_STATUS_LABELS: Record<AssetRequestStatus, string> = {
+    pending: 'Pendente',
+    approved: 'Aprovada',
+    rejected: 'Rejeitada',
+};
+
+export type AssetRequestListItem = {
+    id: number;
+    type: AssetRequestType;
+    type_label: string;
+    status: AssetRequestStatus;
+    status_label: string;
+    quantity: number;
+    notes: string | null;
+    asset_name: string;
+    unit: AssetUnit;
+    branch_name: string;
+    user_name: string;
+    created_at: string;
+    can_review: boolean;
+    can_delete: boolean;
+};
+
+export type AssetOption = {
+    id: number;
+    name: string;
+    unit: AssetUnit;
+};
+
+export type AssetRequestTypeOption = {
+    value: AssetRequestType;
+    label: string;
 };
 
 export type UserListItem = {
