@@ -93,6 +93,8 @@ class AssetRequestController extends Controller
 
     /**
      * Approve the given pending request.
+     *
+     * Approving a surplus offer opens its full quantity for transfer.
      */
     public function approve(AssetRequest $assetRequest): RedirectResponse
     {
@@ -102,6 +104,9 @@ class AssetRequestController extends Controller
             'status' => AssetRequestStatus::Approved,
             'reviewed_by' => auth()->id(),
             'reviewed_at' => now(),
+            'available_quantity' => $assetRequest->type === AssetRequestType::Surplus
+                ? $assetRequest->quantity
+                : null,
         ]);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Solicitação aprovada.']);

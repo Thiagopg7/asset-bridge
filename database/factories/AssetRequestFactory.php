@@ -53,6 +53,8 @@ class AssetRequestFactory extends Factory
 
     /**
      * Indicate that the request has been approved.
+     *
+     * Approving a surplus offer opens its full quantity for transfer.
      */
     public function approved(): static
     {
@@ -60,6 +62,9 @@ class AssetRequestFactory extends Factory
             'status' => AssetRequestStatus::Approved->value,
             'reviewed_by' => User::factory(),
             'reviewed_at' => now(),
+            'available_quantity' => ($attributes['type'] ?? null) === AssetRequestType::Surplus->value
+                ? $attributes['quantity']
+                : null,
         ]);
     }
 

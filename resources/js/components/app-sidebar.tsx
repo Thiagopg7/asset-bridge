@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
+    ArrowLeftRight,
     BookOpen,
     Building2,
     ClipboardList,
@@ -7,12 +8,15 @@ import {
     LayoutGrid,
     Package,
     ShieldCheck,
+    Store,
     Users,
 } from 'lucide-react';
 import AssetController from '@/actions/App/Http/Controllers/AssetController';
 import AssetRequestController from '@/actions/App/Http/Controllers/AssetRequestController';
 import BranchController from '@/actions/App/Http/Controllers/BranchController';
+import MarketplaceController from '@/actions/App/Http/Controllers/MarketplaceController';
 import RoleController from '@/actions/App/Http/Controllers/RoleController';
+import TransferController from '@/actions/App/Http/Controllers/TransferController';
 import UserController from '@/actions/App/Http/Controllers/UserController';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -76,6 +80,20 @@ export function AppSidebar() {
                       title: 'Solicitações',
                       href: AssetRequestController.index.url(),
                       icon: ClipboardList,
+                  },
+              ]
+            : []),
+        ...(can.viewTransfers
+            ? [
+                  {
+                      title: 'Marketplace',
+                      href: MarketplaceController.index.url(),
+                      icon: Store,
+                  },
+                  {
+                      title: 'Transferências',
+                      href: TransferController.index.url(),
+                      icon: ArrowLeftRight,
                   },
               ]
             : []),

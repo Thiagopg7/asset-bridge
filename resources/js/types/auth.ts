@@ -77,6 +77,9 @@ export type Can = {
     viewRequests: boolean;
     createRequests: boolean;
     approveRequests: boolean;
+    viewTransfers: boolean;
+    createTransfers: boolean;
+    authorizeTransfers: boolean;
 };
 
 export type AssetRequestType = 'need' | 'surplus';
@@ -120,6 +123,41 @@ export type AssetOption = {
 export type AssetRequestTypeOption = {
     value: AssetRequestType;
     label: string;
+};
+
+export type MarketplaceOffer = {
+    id: number;
+    asset_name: string;
+    unit: AssetUnit;
+    branch_name: string;
+    quantity: number;
+    available_quantity: number;
+    notes: string | null;
+    created_at: string;
+};
+
+export type TransferStatus = 'pending' | 'authorized' | 'rejected';
+
+export const TRANSFER_STATUS_LABELS: Record<TransferStatus, string> = {
+    pending: 'Pendente',
+    authorized: 'Autorizada',
+    rejected: 'Rejeitada',
+};
+
+export type TransferListItem = {
+    id: number;
+    quantity: number;
+    status: TransferStatus;
+    status_label: string;
+    notes: string | null;
+    asset_name: string;
+    unit: AssetUnit;
+    offer_branch_name: string;
+    branch_name: string;
+    user_name: string;
+    created_at: string;
+    can_review: boolean;
+    can_delete: boolean;
 };
 
 export type UserListItem = {
