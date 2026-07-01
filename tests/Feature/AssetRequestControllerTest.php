@@ -100,6 +100,36 @@ it('rejects a surplus offer greater than the branch available stock', function (
     expect(AssetRequest::count())->toBe(0);
 });
 
+it('blocks a need request when the branch already has the asset in stock', function () {
+    $user = User::factory()->colaborador()->forBranch($this->branch)->create();
+    StockItem::factory()->for($this->branch)->for($this->asset)->create(['quantity' => 4]);
+
+    $this->actingAs($user)
+        ->post('/asset-requests', [
+            'asset_id' => $this->asset->id,
+            'type' => 'need',
+            'quantity' => 2,
+        ])
+        ->assertSessionHasErrors('asset_id');
+
+    expect(AssetRequest::count())->toBe(0);
+});
+
+it('allows a need request when the branch has no stock of the asset', function () {
+    $user = User::factory()->colaborador()->forBranch($this->branch)->create();
+    StockItem::factory()->for($this->branch)->for($this->asset)->create(['quantity' => 0]);
+
+    $this->actingAs($user)
+        ->post('/asset-requests', [
+            'asset_id' => $this->asset->id,
+            'type' => 'need',
+            'quantity' => 2,
+        ])
+        ->assertRedirect('/asset-requests');
+
+    expect(AssetRequest::count())->toBe(1);
+});
+
 it('allows a surplus offer within the branch available stock', function () {
     $user = User::factory()->colaborador()->forBranch($this->branch)->create();
     StockItem::factory()->for($this->branch)->for($this->asset)->create(['quantity' => 10]);
