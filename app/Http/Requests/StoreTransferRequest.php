@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TransferStatus;
 use App\Models\AssetRequest;
+use App\Models\Transfer;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -55,6 +57,18 @@ class StoreTransferRequest extends FormRequest
 
             if ($offer->branch_id === $this->user()->branch_id) {
                 $validator->errors()->add('quantity', 'Não é possível solicitar transferência da própria filial.');
+
+                return;
+            }
+
+            $alreadyRequested = Transfer::query()
+                ->where('branch_id', $this->user()->branch_id)
+                ->where('status', TransferStatus::Pending)
+                ->whereHas('assetRequest', fn ($query) => $query->where('asset_id', $offer->asset_id))
+                ->exists();
+
+            if ($alreadyRequested) {
+                $validator->errors()->add('quantity', 'Sua filial já registrou um pedido de transferência para este ativo.');
 
                 return;
             }

@@ -60,6 +60,33 @@ it('lets a collaborator request a transfer against another branch offer', functi
     ]);
 });
 
+it('blocks a second pending request from the same branch for the same asset', function () {
+    $user = User::factory()->colaborador()->forBranch($this->destinationBranch)->create();
+    Transfer::factory()->for($this->offer)->for($this->destinationBranch)->create(['quantity' => 3]);
+
+    $this->actingAs($user)
+        ->post("/marketplace/{$this->offer->id}/transfers", ['quantity' => 2])
+        ->assertSessionHasErrors('quantity');
+
+    expect(Transfer::count())->toBe(1);
+});
+
+it('lets multiple branches compete for the same offer', function () {
+    $otherDestination = Branch::factory()->create();
+    $userA = User::factory()->colaborador()->forBranch($this->destinationBranch)->create();
+    $userB = User::factory()->colaborador()->forBranch($otherDestination)->create();
+
+    $this->actingAs($userA)
+        ->post("/marketplace/{$this->offer->id}/transfers", ['quantity' => 5])
+        ->assertRedirect('/transfers');
+
+    $this->actingAs($userB)
+        ->post("/marketplace/{$this->offer->id}/transfers", ['quantity' => 7])
+        ->assertRedirect('/transfers');
+
+    expect(Transfer::count())->toBe(2);
+});
+
 it('denies requesting a transfer from the own branch offer', function () {
     $user = User::factory()->colaborador()->forBranch($this->offerBranch)->create();
 
