@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { InfoIcon, PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import AssetController from '@/actions/App/Http/Controllers/AssetController';
 import Heading from '@/components/heading';
@@ -21,6 +21,12 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { ASSET_UNIT_LABELS } from '@/types';
 import type { Asset, Paginated } from '@/types';
 
@@ -53,10 +59,32 @@ export default function AssetsIndex({ assets }: Props) {
 
             <div className="space-y-6 px-4 py-6">
                 <div className="flex items-center justify-between">
-                    <Heading
-                        title="Ativos"
-                        description="Catálogo global de ativos da empresa"
-                    />
+                    <div className="flex items-center gap-2">
+                        <Heading
+                            title="Ativos"
+                            description="Catálogo global de ativos da empresa"
+                        />
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <button
+                                        type="button"
+                                        className="text-muted-foreground transition-colors hover:text-foreground"
+                                        aria-label="Sobre a lista de ativos"
+                                    >
+                                        <InfoIcon className="h-4 w-4" />
+                                    </button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Esta lista reúne todos os ativos elegíveis
+                                    para transferência entre filiais da empresa.
+                                    Se você acha que falta um item, entre em
+                                    contato com o seu gerente para incluí-lo ou
+                                    atualizar o catálogo.
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
                     {can.manageAssets && (
                         <Button asChild size="sm">
                             <Link href={AssetController.create.url()}>
