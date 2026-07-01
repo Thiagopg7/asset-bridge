@@ -28,10 +28,12 @@ it('grants the gerente approval but not management permissions', function () {
     expect($user->can(Permission::RolesAssign->value))->toBeFalse();
 });
 
-it('limits the colaborador to viewing branches', function () {
+it('limits the colaborador to requests, transfers and assets', function () {
     $user = User::factory()->colaborador()->create();
 
-    expect($user->can(Permission::BranchesView->value))->toBeTrue();
+    expect($user->can(Permission::AssetsView->value))->toBeTrue();
+    expect($user->can(Permission::RequestsCreate->value))->toBeTrue();
+    expect($user->can(Permission::BranchesView->value))->toBeFalse();
     expect($user->can(Permission::RequestsApprove->value))->toBeFalse();
 });
 

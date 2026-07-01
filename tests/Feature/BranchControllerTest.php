@@ -22,11 +22,11 @@ it('allows an admin to list branches', function () {
         );
 });
 
-it('allows a colaborador to list branches but not manage them', function () {
+it('forbids a colaborador from listing or managing branches', function () {
     $branch = Branch::factory()->create();
     $user = User::factory()->colaborador()->forBranch($branch)->create();
 
-    $this->actingAs($user)->get('/branches')->assertOk();
+    $this->actingAs($user)->get('/branches')->assertForbidden();
     $this->actingAs($user)->get('/branches/create')->assertForbidden();
     $this->actingAs($user)->delete("/branches/{$branch->id}")->assertForbidden();
 });
