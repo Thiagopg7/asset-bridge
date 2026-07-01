@@ -88,7 +88,9 @@ export default function TransfersIndex({ transfers }: Props) {
                                 <TableHead>Quantidade</TableHead>
                                 <TableHead>Solicitante</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead className="w-[140px]" />
+                                <TableHead className="w-[220px] text-right">
+                                    Ações
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -134,9 +136,9 @@ export default function TransfersIndex({ transfers }: Props) {
                                             {transfer.can_review && (
                                                 <>
                                                     <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="text-emerald-600 hover:text-emerald-600"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="border-emerald-600/40 text-emerald-600 hover:bg-emerald-600/10 hover:text-emerald-600"
                                                         onClick={() =>
                                                             review(
                                                                 transfer,
@@ -144,15 +146,13 @@ export default function TransfersIndex({ transfers }: Props) {
                                                             )
                                                         }
                                                     >
-                                                        <CheckIcon className="h-4 w-4" />
-                                                        <span className="sr-only">
-                                                            Autorizar
-                                                        </span>
+                                                        <CheckIcon className="mr-1 h-4 w-4" />
+                                                        Autorizar
                                                     </Button>
                                                     <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="text-destructive hover:text-destructive"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() =>
                                                             review(
                                                                 transfer,
@@ -160,18 +160,17 @@ export default function TransfersIndex({ transfers }: Props) {
                                                             )
                                                         }
                                                     >
-                                                        <XIcon className="h-4 w-4" />
-                                                        <span className="sr-only">
-                                                            Rejeitar
-                                                        </span>
+                                                        <XIcon className="mr-1 h-4 w-4" />
+                                                        Rejeitar
                                                     </Button>
                                                 </>
                                             )}
                                             {transfer.can_delete && (
                                                 <Button
-                                                    variant="ghost"
+                                                    variant="outline"
                                                     size="icon"
-                                                    className="text-destructive hover:text-destructive"
+                                                    title="Cancelar"
+                                                    className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                     onClick={() =>
                                                         setDeleting(transfer)
                                                     }
