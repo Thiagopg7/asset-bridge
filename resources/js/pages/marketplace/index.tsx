@@ -26,14 +26,57 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { ASSET_UNIT_LABELS } from '@/types';
-import type { MarketplaceOffer, Paginated } from '@/types';
+import type { MarketplaceNeed, MarketplaceOffer, Paginated } from '@/types';
 
 type Props = {
     offers: Paginated<MarketplaceOffer>;
+    needs: Paginated<MarketplaceNeed>;
     canRequest: boolean;
 };
 
-export default function MarketplaceIndex({ offers, canRequest }: Props) {
+function PaginationBar<T>({
+    page,
+    label,
+}: {
+    page: Paginated<T>;
+    label: string;
+}) {
+    if (page.last_page <= 1) {
+        return null;
+    }
+
+    return (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>
+                Exibindo {page.from}–{page.to} de {page.total} {label}
+            </span>
+            <div className="flex gap-1">
+                {page.links.map((link, i) => (
+                    <Button
+                        key={i}
+                        variant={link.active ? 'default' : 'outline'}
+                        size="sm"
+                        disabled={!link.url}
+                        asChild={!!link.url}
+                    >
+                        {link.url ? (
+                            <Link
+                                href={link.url}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ) : (
+                            <span
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        )}
+                    </Button>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+export default function MarketplaceIndex({ offers, needs, canRequest }: Props) {
     const [requesting, setRequesting] = useState<MarketplaceOffer | null>(null);
     const { data, setData, post, processing, errors, reset } = useForm<{
         quantity: number;
@@ -67,8 +110,12 @@ export default function MarketplaceIndex({ offers, canRequest }: Props) {
             <div className="space-y-6 px-4 py-6">
                 <Heading
                     title="Marketplace"
-                    description="Excedentes disponíveis em outras filiais"
+                    description="Ofertas e necessidades de ativos entre filiais"
                 />
+
+                <h2 className="text-sm font-semibold text-foreground">
+                    Ofertas de excesso disponíveis
+                </h2>
 
                 <div className="rounded-lg border">
                     <Table>
@@ -131,42 +178,56 @@ export default function MarketplaceIndex({ offers, canRequest }: Props) {
                     </Table>
                 </div>
 
-                {offers.last_page > 1 && (
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>
-                            Exibindo {offers.from}–{offers.to} de {offers.total}{' '}
-                            ofertas
-                        </span>
-                        <div className="flex gap-1">
-                            {offers.links.map((link, i) => (
-                                <Button
-                                    key={i}
-                                    variant={
-                                        link.active ? 'default' : 'outline'
-                                    }
-                                    size="sm"
-                                    disabled={!link.url}
-                                    asChild={!!link.url}
-                                >
-                                    {link.url ? (
-                                        <Link
-                                            href={link.url}
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    ) : (
-                                        <span
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    )}
-                                </Button>
+                <PaginationBar page={offers} label="ofertas" />
+
+                <h2 className="pt-2 text-sm font-semibold text-foreground">
+                    Necessidades de outras filiais
+                </h2>
+
+                <div className="rounded-lg border">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Ativo</TableHead>
+                                <TableHead>Filial</TableHead>
+                                <TableHead>Quantidade</TableHead>
+                                <TableHead>Observações</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {needs.data.length === 0 && (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={4}
+                                        className="py-10 text-center text-muted-foreground"
+                                    >
+                                        Nenhuma necessidade registrada por
+                                        outras filiais.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                            {needs.data.map((need) => (
+                                <TableRow key={need.id}>
+                                    <TableCell className="font-medium">
+                                        {need.asset_name}
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground">
+                                        {need.branch_name}
+                                    </TableCell>
+                                    <TableCell>
+                                        {need.quantity}{' '}
+                                        {ASSET_UNIT_LABELS[need.unit]}
+                                    </TableCell>
+                                    <TableCell className="max-w-xs truncate text-muted-foreground">
+                                        {need.notes ?? '—'}
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </div>
-                    </div>
-                )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+                <PaginationBar page={needs} label="necessidades" />
             </div>
 
             <Dialog
