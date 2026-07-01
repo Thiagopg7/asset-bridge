@@ -194,9 +194,14 @@ export default function MarketplaceIndex({ offers, canRequest }: Props) {
                                 type="number"
                                 min={1}
                                 max={requesting?.available_quantity}
-                                value={data.quantity}
+                                value={data.quantity === 0 ? '' : data.quantity}
                                 onChange={(e) =>
-                                    setData('quantity', Number(e.target.value))
+                                    setData(
+                                        'quantity',
+                                        e.target.value === ''
+                                            ? 0
+                                            : Number(e.target.value),
+                                    )
                                 }
                             />
                             <InputError message={errors.quantity} />

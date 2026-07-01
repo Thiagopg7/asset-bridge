@@ -80,6 +80,16 @@ it('rejects a transfer request greater than the offer balance', function () {
     expect(Transfer::count())->toBe(0);
 });
 
+it('rejects a transfer request with a quantity below one', function () {
+    $user = User::factory()->colaborador()->forBranch($this->destinationBranch)->create();
+
+    $this->actingAs($user)
+        ->post("/marketplace/{$this->offer->id}/transfers", ['quantity' => 0])
+        ->assertSessionHasErrors('quantity');
+
+    expect(Transfer::count())->toBe(0);
+});
+
 it('denies a user without a branch from requesting a transfer', function () {
     $user = User::factory()->colaborador()->create();
 
