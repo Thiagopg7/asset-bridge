@@ -116,6 +116,27 @@ export type AssetRequestListItem = {
     user_name: string;
     created_at: string;
     can_review: boolean;
+    can_edit: boolean;
+    can_delete: boolean;
+};
+
+export type AssetRequestDetail = {
+    id: number;
+    type: AssetRequestType;
+    type_label: string;
+    status: AssetRequestStatus;
+    status_label: string;
+    quantity: number;
+    notes: string | null;
+    asset_name: string;
+    unit: AssetUnit;
+    branch_name: string;
+    user_name: string;
+    reviewer_name: string | null;
+    reviewed_at: string | null;
+    created_at: string;
+    can_review: boolean;
+    can_edit: boolean;
     can_delete: boolean;
 };
 
