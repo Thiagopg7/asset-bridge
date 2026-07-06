@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import {
     CheckIcon,
+    EyeIcon,
     PencilIcon,
     PlusIcon,
     Trash2Icon,
@@ -109,7 +110,9 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                 <TableHead>Filial</TableHead>
                                 <TableHead>Solicitante</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead className="w-[140px]" />
+                                <TableHead className="w-[220px] text-right">
+                                    Ações
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -167,12 +170,29 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center justify-end gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                title="Ver detalhes"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={AssetRequestController.show.url(
+                                                        request.id,
+                                                    )}
+                                                >
+                                                    <EyeIcon className="h-4 w-4" />
+                                                    <span className="sr-only">
+                                                        Ver detalhes
+                                                    </span>
+                                                </Link>
+                                            </Button>
                                             {request.can_review && (
                                                 <>
                                                     <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="text-emerald-600 hover:text-emerald-600"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="border-emerald-600/40 text-emerald-600 hover:bg-emerald-600/10 hover:text-emerald-600"
                                                         onClick={() =>
                                                             review(
                                                                 request,
@@ -180,15 +200,13 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                                             )
                                                         }
                                                     >
-                                                        <CheckIcon className="h-4 w-4" />
-                                                        <span className="sr-only">
-                                                            Aprovar
-                                                        </span>
+                                                        <CheckIcon className="mr-1 h-4 w-4" />
+                                                        Aprovar
                                                     </Button>
                                                     <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="text-destructive hover:text-destructive"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() =>
                                                             review(
                                                                 request,
@@ -196,17 +214,16 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                                             )
                                                         }
                                                     >
-                                                        <XIcon className="h-4 w-4" />
-                                                        <span className="sr-only">
-                                                            Rejeitar
-                                                        </span>
+                                                        <XIcon className="mr-1 h-4 w-4" />
+                                                        Rejeitar
                                                     </Button>
                                                 </>
                                             )}
                                             {request.can_edit && (
                                                 <Button
-                                                    variant="ghost"
+                                                    variant="outline"
                                                     size="icon"
+                                                    title="Editar"
                                                     asChild
                                                 >
                                                     <Link
@@ -223,9 +240,10 @@ export default function AssetRequestsIndex({ requests, canCreate }: Props) {
                                             )}
                                             {request.can_delete && (
                                                 <Button
-                                                    variant="ghost"
+                                                    variant="outline"
                                                     size="icon"
-                                                    className="text-destructive hover:text-destructive"
+                                                    title="Cancelar"
+                                                    className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                     onClick={() =>
                                                         setDeleting(request)
                                                     }
